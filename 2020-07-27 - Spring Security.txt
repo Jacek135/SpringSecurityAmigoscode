@@ -1,0 +1,124 @@
+2020-07-27 - Spring Security
+https://www.youtube.com/watch?v=her_7pa0vrg
+Spring Security | FULL COURSE
+
+1. Basic authentication: Basic Auth
+@Configuration
+@EnableWebSecurity
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().anyRequest().authenticated()
+                .and()
+                .httpBasic();
+    }
+}
+Drawbacks: 
+- you cannot logout - because login and password is send by every single request.
+
+2. Ant matchers
+@Configuration
+@EnableWebSecurity
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/", "index", "/css/*", "/js/*")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
+    }
+}
+Allows to access main html page like index.html (index.html can be a login page for instance)
+
+3. Application Users
+4. In memory user details manager
+String... users <--- seria uzytkownikow, series of users
+Collection<User> user <--- collection of users
+
+@Configuration
+@EnableWebSecurity
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+{...}
+    @Override
+    @Bean
+    protected UserDetailsService userDetailsService() {
+        UserDetails annaSmithUser = User.builder()
+                .username("annasmith")
+                .password("password")
+                .roles("STUDENT")   //ROLE_STUDENT
+                .build();
+
+        return new InMemoryUserDetailsManager(annaSmithUser);
+    }
+}
+
+5. Password encoding with BCRYPT
+@Configuration
+public class PasswordConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
+}
+
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+	
+{...}
+
+@Override
+    @Bean
+    protected UserDetailsService userDetailsService() {
+        UserDetails annaSmithUser = User.builder()
+                .username("annasmith")
+                .password(passwordEncoder.encode("password"))  <-- password encoder is used here
+                .roles("STUDENT")   //ROLE_STUDENT
+                .build();
+
+        return new InMemoryUserDetailsManager(annaSmithUser);
+    }
+
+
+6. Roles and permissions
+7. Admin user
+ UserDetails lindaAdmin = User.builder()
+                .username("linda")
+                .password(passwordEncoder.encode("password123"))
+                .roles("ADMIN")
+                .build();
+
+8. Role Based Authentication
+@Configuration
+@EnableWebSecurity
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+{...}
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/", "index", "/css/*", "/js/*") .permitAll()
+                .antMatchers("/api/**").hasRole(STUDENT.name())	<-- ROLE based Authentication
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
+    }
+}
+
+9. Permission Based Authentication
+10. Managment API
+

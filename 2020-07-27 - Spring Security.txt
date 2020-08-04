@@ -121,4 +121,3 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
 9. Permission Based Authentication
 10. Management API
-

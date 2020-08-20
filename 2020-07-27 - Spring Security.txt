@@ -160,5 +160,25 @@ public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
 ...
 14. Permission based authentication in action
 
+15. Order does matter
+Order of antMatchers does matter, because it analyse from top to bottom.
+
+16. preAuthorize()
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
+    public List<Student> getAllStudents() {
+        return STUDENTS;
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('student:write;)")
+    public void registerNewStudent(@RequestBody Student student) {
+        System.out.println(student);
+    }
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+...
+}
+
 
 1:45:23

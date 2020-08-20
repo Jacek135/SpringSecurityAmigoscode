@@ -121,5 +121,44 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
 9. Permission Based Authentication
 10. Management API
+11. Disabling CSRF
+protected void configure(HttpSecurity http) throws Exception {
+http
+                .csrf().disable()
+                {...}
+}
+    @PutMapping(path = "{studentId}")
+    public void updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody Student student) {
+        {...}
+    }
+12. hasAuthority()
+ http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/", "index", "/css/*", "/js/*") .permitAll()
+                .antMatchers("/api/**").hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.name())
+                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(COURSE_WRITE.name())
+                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(COURSE_WRITE.name())
+                .antMatchers(HttpMethod.GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
+
+13. Adding Authorities to users
+public enum ApplicationUserRole {
+...
+
+public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
+        Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
+                .map((p -> new SimpleGrantedAuthority(p.getPermission())))
+                .collect(Collectors.toSet());
+        permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        return permissions;
+}
+...
+14. Permission based authentication in action
 
 
+1:45:23

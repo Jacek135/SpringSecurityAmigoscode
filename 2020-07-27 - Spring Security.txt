@@ -180,5 +180,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 ...
 }
 
+17. understanding csrf
+csrf - Cross Site Request Forgery
+
+18. CSRF - token
+
+19. How CSRF token Generation works
+http
+    .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+
+
+
+
 
 1:45:23

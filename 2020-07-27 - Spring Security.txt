@@ -14,7 +14,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 }
-Drawbacks: 
+Drawbacks:
 - you cannot logout - because login and password is send by every single request.
 
 2. Ant matchers
@@ -69,14 +69,14 @@ public class PasswordConfig {
 }
 
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-	
+
 {...}
 
 @Override
@@ -189,8 +189,53 @@ csrf - Cross Site Request Forgery
 http
     .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 
+20. Form Based Authentication
+Basic Auth
+- Authorization: Basic DSKJhdfkjgLKJNB134jklBhZA==
+- HTTPS recommended
+- Simple and Fast
+- Can't logout
 
+client                  server
+    Get Request -->
+    <-- 401 Unauthorized
+Get Request | Base64 username:password -->
+    <-- 200 ok
 
+Form Based Authentication
+- Username & Password
+- Standard in most websites
+- Forms (Full Control)
+- Can logout
+- HTTPS recommended
 
+client                  server
+POST username password -->
+                                <-- validates credentials
+<-- OK
+<-- Cookie SESSIONID
+Any request with SESSIONID
+<-- 200 OK
 
-1:45:23
+21. Enable Form Based Authentication
+Basic authentication - httpBasic() - jakies defaultowe okienko do logowania
+formLogin() - enable Form Based Authentication - wlacza ladna strone do logowania
+
+22. Session ID
+
+23. Customize Login page
+...
+    .formLogin()
+    .loginPage("/login");
+
+24. Updating Login page
+@Controller
+@RequestMapping("/")
+public class TemplateController {
+
+    @GetMapping("login")
+    public String getLogin() {
+        return "login";
+    }
+
+2:17:18

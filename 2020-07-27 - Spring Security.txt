@@ -237,5 +237,59 @@ public class TemplateController {
     public String getLogin() {
         return "login";
     }
+25. Default page after login
+...
+        .loginPage("/login").permitAll()
+        .defaultSuccessUrl("/coueses", true);
+
+26. Remember Me
+SESSIONID expires after 30 minutes of inactivity
+
+27. Remember me cookie and extra options
+...
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/coueses", true)
+                .and()
+                .rememberMe();   //defaults to 2 weeks
+
+28. Remember me cookie and extra options
+Remember-me (2 weeks default) cookie contains:
+- username
+- expiration time
+- md5 hash of the above 2 values
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/coueses", true)
+                .and()
+                .rememberMe()   //defaults to 2 weeks
+                .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
+                .key("somethingverysecured");
+
+29. logout
+.logout()
+        .logoutUrl("/logout")
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))  // what kind of Request should be used
+        .clearAuthentication(true)
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID", "remember-me")
+        .logoutSuccessUrl("/login");
+
+Because of CSRF attact it is the best to use POST Request to defend egainst such attack.
+
+30. logout Button
+
+31. Password, username, remember-me(default-name) parameters
+.formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/coueses", true)
+                    .passwordParameter("passwordxyz") //password is default name
+                    .usernameParameter("usernamexyz") //username is default name
+                .and()
+                .rememberMe()   //defaults to 2 weeks
+                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
+                    .key("somethingverysecured")
+                    .rememberMeParameter("remember-mexyz") //remember-me is default name
+
 
 2:17:18

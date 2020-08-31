@@ -280,16 +280,46 @@ Because of CSRF attact it is the best to use POST Request to defend egainst such
 
 31. Password, username, remember-me(default-name) parameters
 .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
-                    .defaultSuccessUrl("/coueses", true)
-                    .passwordParameter("passwordxyz") //password is default name
-                    .usernameParameter("usernamexyz") //username is default name
-                .and()
-                .rememberMe()   //defaults to 2 weeks
-                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
-                    .key("somethingverysecured")
-                    .rememberMeParameter("remember-mexyz") //remember-me is default name
+    .loginPage("/login")
+        .permitAll()
+        .defaultSuccessUrl("/coueses", true)
+        .passwordParameter("passwordxyz") //password is default name
+        .usernameParameter("usernamexyz") //username is default name
+    .and()
+         .rememberMe()   //defaults to 2 weeks
+         .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
+         .key("somethingverysecured")
+         .rememberMeParameter("remember-mexyz") //remember-me is default name
 
+
+32. DB Authentication overview
+33. Application User class
+34. Application user dao interface
+35. FakeApplicationUserDaoService
+36. DAO Authentication provider
+37. DB authentication in action
+38. Intro To JSON WEB Token(JWT)
+JSON WEB Token
++ Fast
++ Stateless
++ Used across many services
+
+- Compromised Secret Key
+- No visibility to logged in users
+- Token can be stolen
+
+client              server
+  |                     |
+sends credentials ->      (Validates credentials and created and signs token)
+<- sends token
+sends token for each req ->     (Validates token)
+
+jwt.io      <- nice page for JWT
+Token contains of:
+Header - algorythm & token type)
+Payload: Data {"sub": 1234, "name": "Jaohn Doe", "iat": 3424}
+Verify signature: HMACSHA256(...)
+
+39. JWT
 
 2:17:18

@@ -320,6 +320,15 @@ Header - algorythm & token type)
 Payload: Data {"sub": 1234, "name": "Jaohn Doe", "iat": 3424}
 Verify signature: HMACSHA256(...)
 
-39. JWT
+39. JWT Library - Java JWT: JSON WEB Token for Java and Android
+github.com/jwtk/jjwt
+40. JWT Filter & attempt authentication
+41. JWT Filter & successful authentication
+42. Request Filters
+43. Filters and stateless sessions
+44. JWT username and password filter
+45. JWT Token verifier filter in action
+46. JWT config
+
 
 2:17:18
